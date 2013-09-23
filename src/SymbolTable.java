@@ -67,16 +67,12 @@ public class SymbolTable {
     public void put(String key, Character val) {
 	int hKey = hash(key);
 	if (contains(key)) {
-	    /**
-	     * Delete the key
-	     */
+	    // Delete the key if val is null
 	    if (val == null) {
 		delete(key);
 		return;
 	    }
-	    /**
-	     * Replace the value at the specified key
-	     */
+	    // Replace the value at the specified key
 	    for (int i = 0; i < M; i++) {
 		if(keys[(hKey + i) % M].equals(key)){
 		    vals[(hKey + i) % M] = val;
@@ -84,9 +80,7 @@ public class SymbolTable {
 		}
 	    }
 	}
-	/**
-	 * Add a new key- value pair to the table
-	 */
+	// Add a new key- value pair to the table
 	for (int i = 0; i < M; i++) {
 	    if (keys[(hKey + i) % M] == null) {
 		keys[(hKey + i) % M] = key;
@@ -114,8 +108,32 @@ public class SymbolTable {
      * Delete the key (and associated value) from the symbol table
      */
     public void delete(String key) {
-	return;
-    } // dummy code
+	if (!contains(key)) return;
+
+	int i = hash(key);
+
+	// Iterate until the key is found
+	while (!key.equals(keys[i])) {
+	    i = (i + 1) % M;
+	}
+
+	// Delete the key and value
+	keys[i] = null;
+	vals[i] = null;
+
+	i = (i + 1) % M;
+	// Delete and reinsert keys/values nearby
+	while (keys[i] != null) {
+	    String keyTemp = keys[i];
+	    Character valTemp = vals[i];
+	    keys[i] = null;
+	    vals[i] = null;
+	    N--;
+	    put(keyTemp, valTemp);
+	    i = (i + 1) % M;
+	}
+	N--;
+    }
 
     /**
      * Print the contents of the symbol table
