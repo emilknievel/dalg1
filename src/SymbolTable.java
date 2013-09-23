@@ -65,8 +65,37 @@ public class SymbolTable {
      * Insert the key-value pair into the symbol table
      */
     public void put(String key, Character val) {
-	return;
-    } // dummy code
+	int hKey = hash(key);
+	if (contains(key)) {
+	    /**
+	     * Delete the key
+	     */
+	    if (val == null) {
+		delete(key);
+		return;
+	    }
+	    /**
+	     * Replace the value at the specified key
+	     */
+	    for (int i = 0; i < M; i++) {
+		if(keys[(hKey + i) % M].equals(key)){
+		    vals[(hKey + i) % M] = val;
+		    return;
+		}
+	    }
+	}
+	/**
+	 * Add a new key- value pair to the table
+	 */
+	for (int i = 0; i < M; i++) {
+	    if (keys[(hKey + i) % M] == null) {
+		keys[(hKey + i) % M] = key;
+		vals[(hKey + i) % M] = val;
+		N++;
+		return;
+	    }
+	}
+    }
 
     /**
      * Return the value associated with the given key, null if no such value
@@ -79,7 +108,7 @@ public class SymbolTable {
 	    }
 	}
 	return null;
-    } // dummy code
+    }
 
     /**
      * Delete the key (and associated value) from the symbol table
