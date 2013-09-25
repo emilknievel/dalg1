@@ -67,7 +67,7 @@ public class SymbolTable {
     public void put(String key, Character val) {
 	int hKey = hash(key);
 	if (contains(key)) {
-	    // Delete the key if val is null
+	    // Delete the key if the value is null
 	    if (val == null) {
 		delete(key);
 		return;
@@ -80,7 +80,7 @@ public class SymbolTable {
 		}
 	    }
 	}
-	// Add a new key- value pair to the table
+	// Add a new key- value pair to the table if no such key is found
 	for (int i = 0; i < M; i++) {
 	    if (keys[(hKey + i) % M] == null) {
 		keys[(hKey + i) % M] = key;
