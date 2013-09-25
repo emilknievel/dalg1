@@ -110,27 +110,27 @@ public class SymbolTable {
     public void delete(String key) {
 	if (!contains(key)) return;
 
-	int i = hash(key);
+	int hKey = hash(key);
 
 	// Iterate until the key is found
-	while (!key.equals(keys[i])) {
-	    i = (i + 1) % M;
+	while (!key.equals(keys[hKey])) {
+	    hKey = (hKey + 1) % M;
 	}
 
 	// Delete the key and value
-	keys[i] = null;
-	vals[i] = null;
+	keys[hKey] = null;
+	vals[hKey] = null;
 
-	i = (i + 1) % M;
+	hKey = (hKey + 1) % M;
 	// Delete and reinsert keys/values nearby
-	while (keys[i] != null) {
-	    String keyTemp = keys[i];
-	    Character valTemp = vals[i];
-	    keys[i] = null;
-	    vals[i] = null;
+	while (keys[hKey] != null) {
+	    String keyTemp = keys[hKey];
+	    Character valTemp = vals[hKey];
+	    keys[hKey] = null;
+	    vals[hKey] = null;
 	    N--;
 	    put(keyTemp, valTemp);
-	    i = (i + 1) % M;
+	    hKey = (hKey + 1) % M;
 	}
 	N--;
     }
